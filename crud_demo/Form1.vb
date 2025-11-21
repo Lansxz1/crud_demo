@@ -27,13 +27,29 @@ Public Class Form1
             Using cmd As New MySqlCommand(query, conn)
                     cmd.Parameters.AddWithValue("@name", TextBoxName.Text)
                     cmd.Parameters.AddWithValue("@age", TextBoxAge.Text)
-                    cmd.Parameters.AddWithValue("@name", TextBoxEmail.Text)
-                    cmd.ExecuteNonQuery()
+                cmd.Parameters.AddWithValue("@email", TextBoxEmail.Text)
+                cmd.ExecuteNonQuery()
                     MessageBox.Show("Record insert succesfully!")
 
                 End Using
         Catch ex As Exception
             MessageBox.Show(ex.Message)
+        End Try
+    End Sub
+
+    Private Sub btnRead_Click(sender As Object, e As EventArgs) Handles btnRead.Click
+        Dim query As String = "SELECT * FROM crud_demo_db.students_tbl;"
+
+        Try
+            Using conn As New MySqlConnection("server=localhost; userid=root; password=root; database= crud_demo_db")
+                Dim adapter As New MySqlDataAdapter(query, conn) 'Get from database
+                Dim table As New DataTable() 'table object
+                adapter.Fill(table) 'from adapter to table object
+                DataGridView1.DataSource = table 'Display to Datagridview
+
+            End Using
+        Catch ex As Exception
+            MsgBox(ex.Message)
         End Try
     End Sub
 End Class
