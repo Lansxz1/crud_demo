@@ -55,7 +55,7 @@ Public Class Form1
     Private Sub ButtonEdit_Click(sender As Object, e As EventArgs) Handles ButtonEdit.Click
 
         If DataGridView1.SelectedRows.Count = 0 Then
-            MessageBox.Show("Select row to edit.", "Reminder", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("Select row to edit.", "Edit Info", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
 
@@ -67,7 +67,7 @@ Public Class Form1
     Private Sub ButtonUpdate_Click(sender As Object, e As EventArgs) Handles ButtonUpdate.Click
 
         If DataGridView1.SelectedRows.Count = 0 Then
-            MessageBox.Show("Please select a record to update.", "Reminder", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("Please select a record to update.", "Update Info", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
 
@@ -96,5 +96,32 @@ Public Class Form1
 
     End Sub
 
+    Private Sub ButtonDelete_Click(sender As Object, e As EventArgs) Handles ButtonDelete.Click
 
+        If DataGridView1.SelectedRows.Count = 0 Then
+            MessageBox.Show("Select a record to delete!", "Delete Info", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Exit Sub
+        End If
+
+        Dim id As Integer = DataGridView1.SelectedRows(0).Cells("id").Value
+
+        Dim query As String = "DELETE FROM students_tbl WHERE id=@id"
+
+        Try
+            Using conn As New MySqlConnection("server=localhost; userid=root; password=root; database= crud_demo_db")
+                conn.Open()
+            End Using
+
+            Using cmd As New MySqlCommand(query, conn)
+                cmd.Parameters.AddWithValue("@id", id)
+                cmd.ExecuteNonQuery()
+
+                MessageBox.Show("Record deleted successfully!", "Delete Info", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End Using
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+
+    End Sub
 End Class
