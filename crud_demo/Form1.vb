@@ -46,6 +46,7 @@ Public Class Form1
                 Dim table As New DataTable() 'table object
                 adapter.Fill(table) 'from adapter to table object
                 DataGridView1.DataSource = table 'Display to Datagridview
+                DataGridView1.Columns("id").Visible = False
 
             End Using
         Catch ex As Exception
